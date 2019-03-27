@@ -7,4 +7,8 @@ class Index
     {
         return 'nihaoa';
     }
+    public function hello($name='hello world',$city='bejing')
+    {
+        return $name.$city;
+    }
 }
