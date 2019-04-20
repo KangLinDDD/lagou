@@ -8,7 +8,11 @@
 // +----------------------------------------------------------------------
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
-
+//如果需要设置允许所有域名发起的跨域请求，可以使用通配符 *
+header('Access-Control-Allow-Origin: http://localhost:9000');
+//配置允许发送认证信息 比如cookies（会话机制的前提）
+header('Access-Control-Allow-Credentials: true');
+header('Content-Type:application/json; charset=utf-8');
 // [ 应用入口文件 ]
 
 // 定义应用目录

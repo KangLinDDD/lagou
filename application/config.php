@@ -58,7 +58,7 @@ return [
     // 禁止访问模块
     'deny_module_list' => ['common'],
     // 默认控制器名
-    'default_controller' => 'Index',
+    'default_controller' => 'index',
     // 默认操作名
     'default_action' => 'index',
     // 默认验证器
@@ -68,7 +68,7 @@ return [
     // 操作方法后缀
     'action_suffix' => '',
     // 自动搜索控制器
-    'controller_auto_search' => true,
+    'controller_auto_search' => false,
 
     // +----------------------------------------------------------------------
     // | URL设置
@@ -147,7 +147,7 @@ return [
         '__CSS__' => '/static/style/css',
         '__JS__' => '/static/style/js',
         '__IMG__' => '/static/style/images',
-        '__PUBLIC__'=>'/static/style/node_modules'
+        '__PUBLIC__' => '/static/style/node_modules'
     ],
     // 默认跳转页面对应的模板文件
     'dispatch_success_tmpl' => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
@@ -200,7 +200,7 @@ return [
         // 缓存前缀
         'prefix' => '',
         // 缓存有效期 0表示永久缓存
-        'expire' => 0,
+        'expire' => 60,
     ],
 
     // +----------------------------------------------------------------------
@@ -217,6 +217,7 @@ return [
         'type' => '',
         // 是否自动开启 SESSION
         'auto_start' => true,
+        'expire' => 60,
     ],
 
     // +----------------------------------------------------------------------
@@ -226,7 +227,7 @@ return [
         // cookie 名称前缀
         'prefix' => '',
         // cookie 保存时间
-        'expire' => 0,
+        'expire' => 120,
         // cookie 保存路径
         'path' => '/',
         // cookie 有效域名

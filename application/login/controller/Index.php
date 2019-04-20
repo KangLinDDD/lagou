@@ -1,8 +1,12 @@
 <?php
+
 namespace app\login\controller;
-use app\login\model\login;
+
 use think\Controller;
+use app\login\model\login;
 use think\Request;
+use think\Session;
+use think\Cookie;
 
 class Index extends Controller
 {
@@ -12,16 +16,28 @@ class Index extends Controller
         $this->login = new login();
     }
 
-    public function index()
+    public function check_login(Request $request)
     {
-        return $this->fetch('login');
+        session_start();
+        $result = $this->check_pwd();
+        return $result;
     }
-    public function check_login()
+
+    public function check_pwd()
     {
-        if(isset($_POST['email']) && isset($_POST['password'])){
+        if (isset($_POST['email']) && isset($_POST['password'])) {
             $email = $_POST['email'];
-            $pwd = $_POST['password'];
-            return $this->login->check($email,$pwd);
+            $password = $_POST['password'];
+            $result = $this->login->check($email, $password);
+            if (isset($result['id'])) {
+//                setcookie('user', md5($result['id']), time() + 60,'/');
+                Cookie::set('user',md5($result['id']));
+                Session::set(md5($result['id']),$result);
+            }
+            //  1：登陆成功，0：登录失败
+            return $result['id'] ? 1 : 0;
+        } else {
+            return 0;
         }
     }
 }
