@@ -7,12 +7,10 @@
  */
 
 namespace app\index\model;
-use think\Session;
-use think\Cookie;
 use think\Model;
 use think\Db;
 use think\Exception;
-class lists extends Model
+class indexModel extends Model
 {
 //     获取主页左侧列表
     public function getJobList()
@@ -40,7 +38,7 @@ class lists extends Model
     public function getHotJobs()
     {
         try {
-            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,job.city,updatetime,welfare,field,founder,scale,dev_statge')->order('viewtimes desc')->limit(15)->select();
+            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,city,updatetime,welfare,field,founder,scale,dev_statge')->order('viewtimes desc')->limit(15)->select();
             return json($result);
         } catch (Exception $e) {
 
@@ -50,7 +48,7 @@ class lists extends Model
     public function getNewJobs()
     {
         try {
-            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,job.city,updatetime,welfare,field,founder,scale,dev_statge')->order('updatetime desc')->limit(15)->select();
+            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,city,updatetime,welfare,field,founder,scale,dev_statge')->order('updatetime desc')->limit(15)->select();
             return json($result);
         } catch (Exception $e) {
 

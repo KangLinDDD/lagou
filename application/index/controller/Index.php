@@ -2,33 +2,32 @@
 
 namespace app\index\controller;
 use think\Controller;
-//use app\common\controller\Common;
 use think\Request;
-use app\index\model\lists;
+use app\index\model\indexModel;
 
 class Index extends Controller
 {
     public function __construct(Request $request = null)
     {
         parent::__construct($request);
-        $this->lists = new lists();
+        $this->getIndex = new indexModel();
     }
 
     public function index()
     {
-        return $this->lists->getJobList();
+        return $this->getIndex->getJobList();
     }
 
     public function hotJobs()
     {
-        return $this->lists->getHotJobs();
+        return $this->getIndex->getHotJobs();
     }
 
     public function newJobs()
     {
-        return $this->lists->getNewJobs();
+        return $this->getIndex->getNewJobs();
     }
     public function hotSearch(){
-        return $this->lists->getHotSearch();
+        return $this->getIndex->getHotSearch();
     }
 }

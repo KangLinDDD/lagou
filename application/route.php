@@ -14,8 +14,8 @@ return [
         'name' => '\w+',
     ],
     '[hello]'     => [
-        ':id'   => ['lists/hello', ['method' => 'get'], ['id' => '\d+']],
-        ':name' => ['lists/hello', ['method' => 'post']],
+        ':id'   => ['indexModel/hello', ['method' => 'get'], ['id' => '\d+']],
+        ':name' => ['indexModel/hello', ['method' => 'post']],
     ],
 
 ];
