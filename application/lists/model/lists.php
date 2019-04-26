@@ -23,19 +23,22 @@ class lists extends Model
             $field['jobName'] = array('like', '%' . $field['jobName'] . '%');
         }
         if (isset($field['companyName'])) {
-            $field['companyName'] = array('like', '%'. $field['companyName'].'%');
+            $field['companyName'] = array('like', '%' . $field['companyName'] . '%');
         }
         if (isset($field['min_salary'])) {
             $field['min_salary'] = array('egt', $field['min_salary']);
         }
         if (isset($field['updatetime'])) {
-            $field['updatetime'] = array('egt', $field['updatetime']);
+            $field['updatetime'] = array('egt', date("Y-m-d H:i:s",$field['updatetime']/1000));
         }
         if (isset($field['max_salary'])) {
             $field['max_salary'] = array('elt', $field['max_salary']);
         }
         try {
-            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,city,updatetime,welfare,field,founder,scale,dev_statge')->order('viewtimes desc')->where($field)->paginate(10);
+            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,city,updatetime,welfare,field,founder,scale,dev_statge')->order('viewtimes desc')->where($field)->
+            paginate(10, false, [
+                'page' => $currentPage
+            ]);
             return json($result);
         } catch (Exception $e) {
 
@@ -45,8 +48,8 @@ class lists extends Model
     public function getAllJobs($page)
     {
         try {
-            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,city,updatetime,welfare,field,founder,scale,dev_statge')->order('viewtimes desc')->limit($page, 10)->paginate(10,false,[
-                'page'=>$page
+            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,city,updatetime,welfare,field,founder,scale,dev_statge')->order('viewtimes desc')->limit($page, 10)->paginate(10, false, [
+                'page' => $page
             ]);
             return json($result);
         } catch (Exception $e) {

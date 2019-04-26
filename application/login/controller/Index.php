@@ -29,14 +29,30 @@ class Index extends Controller
             $email = $_POST['email'];
             $password = $_POST['password'];
             $result = $this->login->check($email, $password);
+            $arr = array();
             if (isset($result['id'])) {
 //                setcookie('user', md5($result['id']), time() + 60,'/');
-                Cookie::set('user',md5($result['id']));
-                Session::set(md5($result['id']),$result);
+                Cookie::set('user', md5($result['id']));
+                Session::set(md5($result['id']), $result);
+                $arr['statusCode'] = 200;
+                $arr['type'] = $result['type'];
+            } else {
+                $arr['statusCode'] = 400;
+//                $arr['type']=$result['type'];
             }
-            //  1：登陆成功，0：登录失败
-            return $result['id'] ? 1 : 0;
+            return json($arr);
         } else {
+            return 0;
+        }
+    }
+
+    public function checkCookie()
+    {
+        if(Cookie::has('user')){
+            Cookie::set('user',Cookie::get('user'));
+            Session::set(Cookie::get('user'),Session::get(Cookie::get('user')));
+            return json(Session::get(Cookie::get('user')));
+        }else{
             return 0;
         }
     }
