@@ -45,6 +45,7 @@ class indexModel extends Model
         }
     }
 
+//    获取最新职位
     public function getNewJobs()
     {
         try {
@@ -54,6 +55,7 @@ class indexModel extends Model
 
         }
     }
+//    热门搜索
     public function getHotSearch()
     {
         try {

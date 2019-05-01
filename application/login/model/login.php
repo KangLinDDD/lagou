@@ -13,6 +13,7 @@ use think\Db;
 use think\Exception;
 class login extends Model
 {
+    // 检查登录
     public function check($email, $password)
     {
         // 开启事务

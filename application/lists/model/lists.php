@@ -15,6 +15,7 @@ use think\Exception;
 
 class lists extends Model
 {
+//    获取兼职信息
     public function getJobLists($field, $currentPage)
     {
         $field = json_encode($field);

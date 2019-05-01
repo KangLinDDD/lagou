@@ -22,7 +22,7 @@ class Index extends Controller
         $result = $this->check_pwd();
         return $result;
     }
-
+    // 设置登录信息
     public function check_pwd()
     {
         if (isset($_POST['email']) && isset($_POST['password'])) {
@@ -46,14 +46,16 @@ class Index extends Controller
         }
     }
 
+//    检查cookie及session信息
     public function checkCookie()
     {
-        if(Cookie::has('user')){
-            Cookie::set('user',Cookie::get('user'));
-            Session::set(Cookie::get('user'),Session::get(Cookie::get('user')));
+        if (Cookie::has('user')) {
+            Cookie::set('user', Cookie::get('user'));
+            Session::set(Cookie::get('user'), Session::get(Cookie::get('user')));
             return json(Session::get(Cookie::get('user')));
-        }else{
-            return 0;
+        } else {
+            $arr = array('id' => '');
+            return json($arr);
         }
     }
 }
