@@ -7,4 +7,4 @@
 //print_r(json_decode($json));
 //$todaytime=strtotime("today");
 //echo $todaytime;
-echo date('Y-m-d H:i:s',1556072722886/1000);
+echo date('Y-m-d H:i:s',time());

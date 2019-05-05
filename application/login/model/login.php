@@ -19,7 +19,7 @@ class login extends Model
         // 开启事务
         Db::startTrans();
         try {
-            $result = Db::name('users')->where('username', $email)->where('password',md5($password))->field('id,name,type')->find();
+            $result = Db::name('users')->where('username', $email)->where('password',md5($password))->field('id,name,username,type')->find();
             Db::commit();
             return $result;
         } catch (Exception $e) {

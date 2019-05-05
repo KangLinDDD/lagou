@@ -18,7 +18,6 @@ class Index extends Controller
 
     public function check_login(Request $request)
     {
-        session_start();
         $result = $this->check_pwd();
         return $result;
     }

@@ -23,7 +23,7 @@ class register extends Model
                 $arr = array('register'=>false, 'message' => urlencode('该用户名已注册'));
                 return urldecode(json_encode($arr));
             } else {
-                Db::name('users')->insert(['username' => $email, 'password' => md5($pwd), 'type' => $type]);
+                Db::name('users')->insert(['username' => $email, 'password' => md5($pwd), 'type' => $type,'createTime'=>date('Y-m-d H:i:s',time())]);
                 Db::commit();
                 return urldecode(json_encode(['register'=>true]));
             }
