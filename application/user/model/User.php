@@ -16,7 +16,7 @@ class User extends Model
 {
     public function getUserInfo($id){
         try{
-            $result = Db::name('users')->where('id',$id)->find();
+            $result = Db::name('users')->where('id',$id)->field('id,username,name,sex,tel,updateTime,type,education,experience,status,headImgUrl,email')->find();
             return json($result);
         }catch(Exception $e){
             $e->getMessage();

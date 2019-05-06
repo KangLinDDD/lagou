@@ -21,12 +21,12 @@ class Index extends Controller
         }
     }
 
-    public function index()
+    public function check()
     {
         // 获取用户信息
+        return $this->jianli->checkJianLi($this->uid);
 
     }
-
     public function basicInfo()
     {
 //        if(isset($_POST['headImg'])){
@@ -36,7 +36,6 @@ class Index extends Controller
 //        }
         return 0;
     }
-
     public function headImg()
     {
         if (isset($_FILES['file'])) {
@@ -60,6 +59,26 @@ class Index extends Controller
     }
     public function addExpectInfo(){
         $result = $this->jianli->addExceptInfo($this->uid);
+        return $result;
+    }
+    public function addWorkShow(){
+        $result = $this->jianli->addWorkShow();
+        return $result;
+    }
+    public function updateProject(){
+        $result = $this->jianli->updateProject();
+        return $result;
+    }
+    public function updateEducation(){
+        $result = $this->jianli->updateEducation();
+        return $result;
+    }
+    public function updateWorkExperience(){
+        $result = $this->jianli->updateWorkExperience();
+        return $result;
+    }
+    public function getJianLi(){
+        $result = $this->jianli->getJianLi($this->uid);
         return $result;
     }
 }
