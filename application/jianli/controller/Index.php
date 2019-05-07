@@ -81,4 +81,7 @@ class Index extends Controller
         $result = $this->jianli->getJianLi($this->uid);
         return $result;
     }
+    public function delete(){
+        return $this->jianli->delete();
+    }
 }

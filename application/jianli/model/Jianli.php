@@ -101,17 +101,19 @@ class Jianli extends Model
     }
     public function updateProject(){
         try{
-            $result = Db::name('project_experience')->where('jianId',$_POST['jianId'])->find();
-            if (isset($result)){
+            if (isset($_POST['id'])){
                 // 更新
-                $update = Db::name('project_experience')->where('jianId',$_POST['jianId'])->update($_POST);
+                $update = Db::name('project_experience')->where('id',$_POST['id'])->update($_POST);
                 Db::commit();
                 return $update;
             }else{
                 // 插入
-                $insert = Db::name('project_experience')->insert($_POST);
+                Db::name('project_experience')->insert($_POST);
+                $insertId = Db::name('project_experience')->getLastInsID();
+                $arr = array();
+                $arr['id']=$insertId;
                 Db::commit();
-                return $insert;
+                return json($arr);
             }
         }catch(Exception $e){
             Db::rollback();
@@ -120,17 +122,19 @@ class Jianli extends Model
     }
     public function updateEducation(){
         try{
-            $result = Db::name('education')->where('jianId',$_POST['jianId'])->find();
-            if (isset($result)){
+            if (isset($_POST['id'])){
                 // 更新
-                $update = Db::name('education')->where('jianId',$_POST['jianId'])->update($_POST);
+                $update = Db::name('education')->where('id',$_POST['id'])->update($_POST);
                 Db::commit();
                 return $update;
             }else{
                 // 插入
-                $insert = Db::name('education')->insert($_POST);
+                Db::name('education')->insert($_POST);
+                $insertId = Db::name('education')->getLastInsID();
                 Db::commit();
-                return $insert;
+                $arr = array();
+                $arr['id']=$insertId;
+                return json($arr);
             }
         }catch(Exception $e){
             Db::rollback();
@@ -139,17 +143,19 @@ class Jianli extends Model
     }
     public function updateWorkExperience(){
         try{
-            $result = Db::name('work_experience')->where('jianId',$_POST['jianId'])->find();
-            if (isset($result)){
+            if (isset($_POST['id'])){
                 // 更新
-                $update = Db::name('work_experience')->where('jianId',$_POST['jianId'])->update($_POST);
+                $update = Db::name('work_experience')->where('id',$_POST['id'])->update($_POST);
                 Db::commit();
                 return $update;
             }else{
                 // 插入
-                $insert = Db::name('work_experience')->insert($_POST);
+                Db::name('work_experience')->insert($_POST);
+                $insertId = Db::name('work_experience')->getLastInsID();
+                $arr = array();
+                $arr['id']=$insertId;
                 Db::commit();
-                return $insert;
+                return json($arr);
             }
         }catch(Exception $e){
             Db::rollback();
@@ -161,13 +167,24 @@ class Jianli extends Model
         try{
             $result = Db::name('jianli')->where('userId',$userId)->find();
             $expectInfo = ['expectCity'=>$result['expectCity'],'nature'=>$result['nature'],'expectJob'=>$result['expectJob'],'min_salary'=>$result['min_salary'],'max_salary'=>$result['max_salary']];
-            $work_experience = Db::name('work_experience')->where('jianId',$result['id'])->field('jobName,startTime,endTime,companyName')->select();
-            $project_experience = Db::name('project_experience')->where('jianId',$result['id'])->field('projectName,job,startTime,endTime,describe')->select();
-            $education = Db::name('education')->where('jianId',$result['id'])->field('schoolName,education,majorName,startYear,endYear')->select();
+            $work_experience = Db::name('work_experience')->where('jianId',$result['id'])->field('id,jobName,startTime,endTime,companyName')->order('startTime asc')->select();
+            $project_experience = Db::name('project_experience')->where('jianId',$result['id'])->field('id,projectName,job,startTime,endTime,describe')->order('startTime asc')->select();
+            $education = Db::name('education')->where('jianId',$result['id'])->field('id,schoolName,education,majorName,startTime,endTime')->order('startTime asc')->select();
             $self_describe = $result['self_describe'];
             $works = Db::name('opus')->where('jianId',$result['id'])->field('url,works_describe')->find();
             $arr = array('expectInfo'=>$expectInfo,'work_experience'=>$work_experience,'project_experience'=>$project_experience,'education'=>$education,'self_describe'=>$self_describe,'works'=>$works);
             return json($arr);
+        }catch(Exception $e){
+            Db::rollback();
+            $e->getMessage();
+        }
+    }
+    public function delete(){
+        Db::startTrans();
+        try{
+            $result = Db::name($_POST['name'])->where('id',$_POST['id'])->delete();
+            Db::commit();
+            return $result;
         }catch(Exception $e){
             Db::rollback();
             $e->getMessage();
