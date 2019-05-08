@@ -30,16 +30,10 @@ class Index extends Controller
             $result = $this->login->check($email, $password);
             $arr = array();
             if (isset($result['id'])) {
-//                setcookie('user', md5($result['id']), time() + 60,'/');
                 Cookie::set('user', md5($result['id']));
                 Session::set(md5($result['id']), $result);
-                $arr['statusCode'] = 200;
-                $arr['type'] = $result['type'];
-            } else {
-                $arr['statusCode'] = 400;
-//                $arr['type']=$result['type'];
             }
-            return json($arr);
+            return json($result);
         } else {
             return 0;
         }

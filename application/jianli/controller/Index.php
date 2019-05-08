@@ -40,7 +40,7 @@ class Index extends Controller
     {
         if (isset($_FILES['file'])) {
             $result = $this->jianli->addHeadImg(Cookie::get('user'),$this->uid);
-            $time=date('Y-M-D h:i:s',time());
+//            $time=date('Y-M-D h:i:s',time());
             return json($result);
         } else {
             return 0;
