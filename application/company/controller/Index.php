@@ -15,6 +15,7 @@ class Index extends Controller
         $this->company = new Company();
         if (Cookie::has('user') && Session::has(Cookie::get('user'))){
             $this->uid = Session::get(Cookie::get('user'))['id'];
+            $this->companyId = Session::get(Cookie::get('user'))['companyId'];
         }
     }
 
@@ -50,5 +51,16 @@ class Index extends Controller
     }
     public function getAllData(){
         return $this->company->getAllData($this->uid);
+    }
+    public function addProduct(){
+        return $this->company->addProduct($this->uid);
+    }
+    public function addProductImg(){
+        if(isset($_FILES['file'])){
+            return $this->company->addProductImg(Cookie::get('user'),$this->uid);
+        }
+    }
+    public function createJob(){
+        return $this->company->createJob($this->companyId);
     }
 }

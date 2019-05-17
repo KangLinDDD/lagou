@@ -35,9 +35,12 @@ class lists extends Model
         if (isset($field['max_salary'])) {
             $field['max_salary'] = array('elt', $field['max_salary']);
         }
+        if (isset($field['city'])) {
+            $field['company.city'] = array('like', '%'.$field['city'].'%');
+            unset($field['city']);
+        }
         try {
-            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,city,updatetime,welfare,field,founder,scale,dev_statge')->order('viewtimes desc')->where($field)->
-            paginate(10, false, [
+            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,company.city,updatetime,welfare,field,founder,scale,dev_statge')->order('viewtimes desc')->where($field)->paginate(10, false, [
                 'page' => $currentPage
             ]);
             return json($result);
@@ -49,7 +52,7 @@ class lists extends Model
     public function getAllJobs($page)
     {
         try {
-            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,city,updatetime,welfare,field,founder,scale,dev_statge')->order('viewtimes desc')->limit($page, 10)->paginate(10, false, [
+            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,company.city,updatetime,welfare,field,founder,scale,dev_statge')->order('viewtimes desc')->limit($page, 10)->paginate(10, false, [
                 'page' => $page
             ]);
             return json($result);

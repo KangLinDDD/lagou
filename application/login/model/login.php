@@ -20,6 +20,13 @@ class login extends Model
         Db::startTrans();
         try {
             $result = Db::name('users')->where('username', $email)->where('password',md5($password))->field('id,name,username,type')->find();
+            if($result['type']==='0'){
+                $jianId=Db::name('jianli')->where('userId',$result['id'])->field('id')->find();
+                $result['jianId']=$jianId['id'];
+            }else{
+                $companyId=Db::name('company')->where('userId',$result['id'])->field('companyId')->find();
+                $result['companyId']=$companyId['companyId'];
+            }
             Db::commit();
             return $result;
         } catch (Exception $e) {

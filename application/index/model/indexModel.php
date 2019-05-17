@@ -38,7 +38,7 @@ class indexModel extends Model
     public function getHotJobs()
     {
         try {
-            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,city,updatetime,welfare,field,founder,scale,dev_statge')->order('viewtimes desc')->limit(15)->select();
+            $result = Db::table('job')->join('company', 'job.companyId = company.companyId')->field('jobId,jobName,company.companyId,companyName,min_salary,max_salary,experience,education,advantage,company.city,updatetime,welfare,field,founder,scale,dev_statge')->order('viewtimes desc')->limit(15)->select();
             return json($result);
         } catch (Exception $e) {
 

@@ -28,7 +28,6 @@ class Index extends Controller
             $email = $_POST['email'];
             $password = $_POST['password'];
             $result = $this->login->check($email, $password);
-            $arr = array();
             if (isset($result['id'])) {
                 Cookie::set('user', md5($result['id']));
                 Session::set(md5($result['id']), $result);

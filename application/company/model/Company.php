@@ -8,7 +8,6 @@
 
 namespace app\company\model;
 
-
 use think\Model;
 use think\Db;
 use think\Exception;
@@ -149,16 +148,81 @@ class Company extends Model
         Db::startTrans();
         try {
             $result = Db::name('company')->where('userId', $uid)->find();
+            $confirmStatus = $result['confirmStatus'];
             $founder = Db::name('founder')->where('userId', $uid)->field('name,instroduction,headImg')->find();
             $founderHeadImg = $founder['headImg'];
             $founder = ['name' => $founder['name'], 'instroduction' => $founder['instroduction']];
             $cityInfo = ['city'=>$result['city'],'field'=>$result['field'],'scale'=>$result['scale'],'url'=>$result['url']];
-            $basic = ['logo' => $result['logo'], 'companyName' => $result['companyName'], 'easyname' => $result['easyname'], 'coreValues' => $result['coreValues']];
+            $logo = $result['logo'];
+            $basic = ['companyName' => $result['companyName'], 'easyname' => $result['easyname'], 'coreValues' => $result['coreValues']];
             $dev_statge = $result['dev_statge'];
+            $products = Db::name('product')->where('userId',$uid)->find();
+            $product=['productName'=>$products['productName'],'productUrl'=>$products['productUrl'],'productInstroduce'=>$products['productInstroduce']];
+            $productImgUrl = $products['productImgUrl'];
             $introduce = $result['introduce'];
-            $arr = ['founderHeadImg'=>$founderHeadImg,'founder'=>$founder,'cityInfo'=>$cityInfo,'basic'=>$basic,'dev_statge'=>$dev_statge,'introduce'=>$introduce];
+            $arr = ['confirmStatus'=>$confirmStatus,'logo'=>$logo,'founderHeadImg'=>$founderHeadImg,'founder'=>$founder,'cityInfo'=>$cityInfo,'basic'=>$basic,'dev_statge'=>$dev_statge,'introduce'=>$introduce,'product'=>$product,'productImg'=>$productImgUrl];
             return json($arr);
         } catch (Exception $e) {
+            Db::rollback();
+            $e->getMessage();
+        }
+    }
+    public function addProduct($uid){
+        Db::startTrans();
+        try{
+            $result = Db::name('product')->where('userId',$uid)->find();
+            if(!isset($result)){
+                Db::name('product')->insert(['userId'=>$uid]);
+            }
+            $product = Db::name('product')->where('userId',$uid)->update($_POST);
+            Db::commit();
+            return $product;
+        }catch(Exception $e){
+            Db::rollback();
+            $e->getMessage();
+        }
+    }
+    public function addProductImg($userId, $uId)
+    {
+        Db::startTrans();
+        try {
+            $productId = Db::name('product')->where('userId', $uId)->field('id')->find();
+            $productId = $productId['id'];
+            if (!isset($productId)) {
+                Db::name('product')->insert(['userId' => $uId]);
+                $productId = Db::name('product')->getLastInsID();
+            }
+            $res = Db::name('company')->where('userId', $uId)->where('productId', $productId)->find();
+            if (!isset($res)) {
+                Db::name('company')->where('userId', $uId)->update(['productId' => $productId]);
+            }
+            $filepath = 'static/product/';
+            $filename = $userId . time() . strstr($_FILES['file']['name'], '.');
+            if (move_uploaded_file($_FILES['file']['tmp_name'], $filepath . $filename)) {
+                // 将图片路径写进数据库并返回
+                $picPath = 'http://tp5.com/' . $filepath . $filename;
+
+                Db::table('product')->where('userId', $uId)->update(['productImgUrl' => $picPath,]);
+                Db::commit();
+                return $picPath;
+            } else {
+                return 100;
+            }
+        } catch (Exception $e) {
+            Db::rollback();
+            $e->getMessage();
+        }
+    }
+    public function createJob($companyId){
+        Db::startTrans();
+        try{
+            $arr = $_POST;
+            $arr['companyId']=$companyId;
+//            return json($arr);
+            $result=Db::name('job')->insert($arr);
+            Db::commit();
+            return $result;
+        }catch(Exception $e){
             Db::rollback();
             $e->getMessage();
         }
