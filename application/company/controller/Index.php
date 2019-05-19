@@ -9,6 +9,9 @@ use think\Session;
 
 class Index extends Controller
 {
+    public $company;
+    public $uid;
+    public $companyId;
     public function __construct(Request $request = null)
     {
         parent::__construct($request);
@@ -18,7 +21,6 @@ class Index extends Controller
             $this->companyId = Session::get(Cookie::get('user'))['companyId'];
         }
     }
-
     public function confirm()
     {
         if (isset($_FILES['file'])) {
@@ -62,5 +64,12 @@ class Index extends Controller
     }
     public function createJob(){
         return $this->company->createJob($this->companyId);
+    }
+    public function getJobById(){
+        if(isset($_POST['jobId'])){
+            return $this->company->getJobById($_POST['jobId']);
+        }else{
+            return '';
+        }
     }
 }

@@ -20,16 +20,10 @@ class Jianli extends Model
     public function checkJianLi($id){
         Db::startTrans();
         try{
-            $result = Db::name('jianli')->where('userId',$id)->find();
-            if(isset($result)){
-                Db::commit();
-                return json($result);
-            }else{
-                Db::name('jianli')->where('userId',$id)->insert(['userId'=>$id]);
-                $insert = Db::name('jianli')->getLastInsID();
-                Db::commit();
-                return $insert;
-            }
+            Db::name('jianli')->where('userId',$id)->insert(['userId'=>$id]);
+            $insert = Db::name('jianli')->getLastInsID();
+            Db::commit();
+            return $insert;
         }catch (Exception $e){
             Db::rollback();
             $e->getMessage();

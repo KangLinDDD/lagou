@@ -24,8 +24,9 @@ class login extends Model
                 $jianId=Db::name('jianli')->where('userId',$result['id'])->field('id')->find();
                 $result['jianId']=$jianId['id'];
             }else{
-                $companyId=Db::name('company')->where('userId',$result['id'])->field('companyId')->find();
+                $companyId=Db::name('company')->where('userId',$result['id'])->field('companyId,easyname')->find();
                 $result['companyId']=$companyId['companyId'];
+                $result['easyname']=$companyId['easyname'];
             }
             Db::commit();
             return $result;

@@ -39,16 +39,10 @@ class Company extends Model
     {
         Db::startTrans();
         try {
-            $result = Db::name('company')->where('userId', $id)->find();
-            if (isset($result)) {
-                Db::commit();
-                return json($result);
-            } else {
-                Db::name('company')->where('userId', $id)->insert(['userId' => $id]);
-                $insertId = Db::name('company')->getLastInsID();
-                Db::commit();
-                return $insertId;
-            }
+            Db::name('company')->where('userId', $id)->insert(['userId' => $id]);
+            $insertId = Db::name('company')->getLastInsID();
+            Db::commit();
+            return $insertId;
         } catch (Exception $e) {
             Db::rollback();
             $e->getMessage();
@@ -152,36 +146,39 @@ class Company extends Model
             $founder = Db::name('founder')->where('userId', $uid)->field('name,instroduction,headImg')->find();
             $founderHeadImg = $founder['headImg'];
             $founder = ['name' => $founder['name'], 'instroduction' => $founder['instroduction']];
-            $cityInfo = ['city'=>$result['city'],'field'=>$result['field'],'scale'=>$result['scale'],'url'=>$result['url']];
+            $cityInfo = ['city' => $result['city'], 'field' => $result['field'], 'scale' => $result['scale'], 'url' => $result['url']];
             $logo = $result['logo'];
             $basic = ['companyName' => $result['companyName'], 'easyname' => $result['easyname'], 'coreValues' => $result['coreValues']];
             $dev_statge = $result['dev_statge'];
-            $products = Db::name('product')->where('userId',$uid)->find();
-            $product=['productName'=>$products['productName'],'productUrl'=>$products['productUrl'],'productInstroduce'=>$products['productInstroduce']];
+            $products = Db::name('product')->where('userId', $uid)->find();
+            $product = ['productName' => $products['productName'], 'productUrl' => $products['productUrl'], 'productInstroduce' => $products['productInstroduce']];
             $productImgUrl = $products['productImgUrl'];
             $introduce = $result['introduce'];
-            $arr = ['confirmStatus'=>$confirmStatus,'logo'=>$logo,'founderHeadImg'=>$founderHeadImg,'founder'=>$founder,'cityInfo'=>$cityInfo,'basic'=>$basic,'dev_statge'=>$dev_statge,'introduce'=>$introduce,'product'=>$product,'productImg'=>$productImgUrl];
+            $arr = ['confirmStatus' => $confirmStatus, 'logo' => $logo, 'founderHeadImg' => $founderHeadImg, 'founder' => $founder, 'cityInfo' => $cityInfo, 'basic' => $basic, 'dev_statge' => $dev_statge, 'introduce' => $introduce, 'product' => $product, 'productImg' => $productImgUrl];
             return json($arr);
         } catch (Exception $e) {
             Db::rollback();
             $e->getMessage();
         }
     }
-    public function addProduct($uid){
+
+    public function addProduct($uid)
+    {
         Db::startTrans();
-        try{
-            $result = Db::name('product')->where('userId',$uid)->find();
-            if(!isset($result)){
-                Db::name('product')->insert(['userId'=>$uid]);
+        try {
+            $result = Db::name('product')->where('userId', $uid)->find();
+            if (!isset($result)) {
+                Db::name('product')->insert(['userId' => $uid]);
             }
-            $product = Db::name('product')->where('userId',$uid)->update($_POST);
+            $product = Db::name('product')->where('userId', $uid)->update($_POST);
             Db::commit();
             return $product;
-        }catch(Exception $e){
+        } catch (Exception $e) {
             Db::rollback();
             $e->getMessage();
         }
     }
+
     public function addProductImg($userId, $uId)
     {
         Db::startTrans();
@@ -213,16 +210,36 @@ class Company extends Model
             $e->getMessage();
         }
     }
-    public function createJob($companyId){
+
+    public function createJob($companyId)
+    {
         Db::startTrans();
-        try{
-            $arr = $_POST;
-            $arr['companyId']=$companyId;
-//            return json($arr);
-            $result=Db::name('job')->insert($arr);
+        try {
+            if(isset($_POST['jobId'])){
+                $jonId = $_POST['jobId'];
+            }
+            $arr = $_POST['data'];
+            $arr['companyId'] = $companyId;
+            if ($_POST['option'] === 'update') {
+                $result = Db::name('job')->where('jobId', $jonId)->update($arr);
+            } else if ($_POST['option'] === 'insert') {
+                $result = Db::name('job')->insert($arr);
+            }
             Db::commit();
             return $result;
-        }catch(Exception $e){
+        } catch (Exception $e) {
+            Db::rollback();
+            $e->getMessage();
+        }
+    }
+
+    public function getJobById($jobId)
+    {
+        Db::startTrans();
+        try {
+            $result = Db::name('job')->where('jobId', $jobId)->find();
+            return json($result);
+        } catch (Exception $e) {
             Db::rollback();
             $e->getMessage();
         }

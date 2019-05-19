@@ -24,9 +24,16 @@ class register extends Model
                 return urldecode(json_encode($arr));
             } else {
                 Db::name('users')->insert(['username' => $email, 'password' => md5($pwd), 'type' => $type,'createTime'=>date('Y-m-d H:i:s',time())]);
-                Db::commit();
-                return urldecode(json_encode(['register'=>true]));
+                $uid=Db::name('users')->getLastInsID();
             }
+            if($type==='0'){
+                Db::name('jianli')->insert(['userId'=>$uid]);
+                Db::commit();
+            }else{
+                Db::name('company')->insert(['userId'=>$uid]);
+                Db::commit();
+            }
+            return urldecode(json_encode(['register'=>true]));
         } catch (Exception $e) {
             Db::rollback();
             return $e->getMessage();

@@ -8,6 +8,7 @@ use app\register\model\register;
 
 class Index extends Controller
 {
+    public $register;
     public function __construct(Request $request = null)
     {
         parent::__construct($request);
