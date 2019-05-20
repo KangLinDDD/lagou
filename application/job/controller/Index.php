@@ -21,13 +21,13 @@ class Index extends Controller
         }
     }
 
-    public function getValidJob()
+    public function getJob()
     {
-        return $this->job->getValidJob($this->companyId);
+        return $this->job->getJob($this->companyId);
     }
-    public function getJobById()
+    public function getJobAndComById()
     {
-        return $this->job->getJobById();
+        return $this->job->getJobAndComById();
     }
     public function addViewTime()
     {
@@ -36,5 +36,32 @@ class Index extends Controller
     public function getType()
     {
         return $this->job->getType();
+    }
+    public function changeStatus(){
+        return $this->job->changeStatus();
+    }
+    public function getJobById()
+    {
+        if(isset($_POST['jobId'])){
+            return $this->job->getJobById($_POST['jobId']);
+        }else{
+            return '';
+        }
+    }
+    public function collect(){
+        return $this->job->collect($this->uid);
+    }
+    public function getCollect(){
+        if(isset($_POST['currentPage'])){
+            return $this->job->getCollect($this->uid,$_POST['currentPage']);
+        }
+    }
+    public function checkCollect(){
+        return $this->job->checkCollect($this->uid);
+    }
+    public function cancleCollect(){
+        if (isset($_POST['id'])){
+            return $this->job->cancleCollect($_POST['id']);
+        }
     }
 }

@@ -220,6 +220,7 @@ class Company extends Model
             }
             $arr = $_POST['data'];
             $arr['companyId'] = $companyId;
+            $arr['status']=0;
             if ($_POST['option'] === 'update') {
                 $result = Db::name('job')->where('jobId', $jonId)->update($arr);
             } else if ($_POST['option'] === 'insert') {
@@ -227,18 +228,6 @@ class Company extends Model
             }
             Db::commit();
             return $result;
-        } catch (Exception $e) {
-            Db::rollback();
-            $e->getMessage();
-        }
-    }
-
-    public function getJobById($jobId)
-    {
-        Db::startTrans();
-        try {
-            $result = Db::name('job')->where('jobId', $jobId)->find();
-            return json($result);
         } catch (Exception $e) {
             Db::rollback();
             $e->getMessage();

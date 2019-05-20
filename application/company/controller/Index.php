@@ -65,11 +65,4 @@ class Index extends Controller
     public function createJob(){
         return $this->company->createJob($this->companyId);
     }
-    public function getJobById(){
-        if(isset($_POST['jobId'])){
-            return $this->company->getJobById($_POST['jobId']);
-        }else{
-            return '';
-        }
-    }
 }

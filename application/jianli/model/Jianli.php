@@ -184,4 +184,21 @@ class Jianli extends Model
             $e->getMessage();
         }
     }
+    public function delivery($uid){
+        Db::startTrans();
+        try{
+            $jianId=Db::name('jianli')->where('userId',$uid)->field('id')->find();
+            $search = Db::name('delivery')->where('jobId',$_POST['jobId'])->where('jianId',$jianId['id'])->find();
+            if(count($search)!==0){
+                return 2;
+            }else{
+                $result = Db::name('delivery')->insert(['jianId'=>$jianId['id'],'userId'=>$uid,'jobId'=>$_POST['jobId']]);
+                Db::commit();
+                return $result;
+            }
+        }catch(Exception $e){
+            Db::rollback();
+            $e->getMessage();
+        }
+    }
 }

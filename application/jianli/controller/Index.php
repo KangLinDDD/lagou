@@ -12,6 +12,8 @@ use think\Session;
 
 class Index extends Controller
 {
+    public $jianli;
+    public $uid;
     public function __construct(Request $request = null)
     {
         parent::__construct($request);
@@ -20,27 +22,19 @@ class Index extends Controller
             $this->uid = Session::get(Cookie::get('user'))['id'];
         }
     }
-
+    public function delivery(){
+        return $this->jianli->delivery($this->uid);
+    }
     public function check()
     {
         // 获取用户信息
         return $this->jianli->checkJianLi($this->uid);
 
     }
-    public function basicInfo()
-    {
-//        if(isset($_POST['headImg'])){
-//            return $_POST['headImg'];
-//        }else{
-//            return 0;
-//        }
-        return 0;
-    }
     public function headImg()
     {
         if (isset($_FILES['file'])) {
             $result = $this->jianli->addHeadImg(Cookie::get('user'),$this->uid);
-//            $time=date('Y-M-D h:i:s',time());
             return json($result);
         } else {
             return 0;

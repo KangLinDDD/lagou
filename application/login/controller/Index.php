@@ -41,7 +41,7 @@ class Index extends Controller
 //    检查cookie及session信息
     public function checkCookie()
     {
-        if (Cookie::has('user')) {
+        if (Cookie::has('user')&&Session::has(Cookie::get('user'))) {
             Cookie::set('user', Cookie::get('user'));
             Session::set(Cookie::get('user'), Session::get(Cookie::get('user')));
             return json(Session::get(Cookie::get('user')));
